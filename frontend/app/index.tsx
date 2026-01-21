@@ -2,9 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Dimensions } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import { LinearGradient } from 'expo-linear-gradient';
-
-const { width } = Dimensions.get('window');
 
 export default function HomeScreen() {
   const router = useRouter();
