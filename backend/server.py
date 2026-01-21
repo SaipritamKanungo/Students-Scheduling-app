@@ -281,6 +281,8 @@ async def delete_study_plan(plan_id: str):
         if result.deleted_count == 0:
             raise HTTPException(status_code=404, detail="Study plan not found")
         return {"message": "Study plan deleted successfully"}
+    except HTTPException:
+        raise  # Re-raise HTTPExceptions as-is
     except Exception as e:
         logging.error(f"Error deleting study plan: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
