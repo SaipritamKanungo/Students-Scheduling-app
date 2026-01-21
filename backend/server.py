@@ -194,7 +194,8 @@ async def create_study_plan(plan_data: StudyPlanCreate):
         result = await db.study_plans.insert_one(plan_dict)
         plan_dict['id'] = str(result.inserted_id)
         
-        return plan_dict
+        # Ensure all nested objects are JSON serializable
+        return serialize_doc(plan_dict)
     except Exception as e:
         logging.error(f"Error creating study plan: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
