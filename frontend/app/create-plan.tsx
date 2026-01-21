@@ -10,10 +10,10 @@ import {
   Platform,
   Alert,
   ActivityIndicator,
+  Modal,
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import DateTimePicker from '@react-native-community/datetimepicker';
 
 interface Topic {
   name: string;
