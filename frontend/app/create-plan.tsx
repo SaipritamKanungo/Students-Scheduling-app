@@ -192,19 +192,83 @@ export default function CreatePlanScreen() {
             </Text>
           </TouchableOpacity>
 
-          {showDatePicker && (
-            <DateTimePicker
-              value={currentExamDate}
-              mode="date"
-              minimumDate={new Date()}
-              onChange={(event, selectedDate) => {
-                setShowDatePicker(Platform.OS === 'ios');
-                if (selectedDate) {
-                  setCurrentExamDate(selectedDate);
-                }
-              }}
-            />
-          )}
+          {/* Custom Date Picker Modal for Web Compatibility */}
+          <Modal
+            visible={showDatePicker}
+            transparent={true}
+            animationType="fade"
+            onRequestClose={() => setShowDatePicker(false)}
+          >
+            <View style={styles.modalOverlay}>
+              <View style={styles.datePickerModal}>
+                <Text style={styles.modalTitle}>Select Exam Date</Text>
+                
+                {/* Date Input */}
+                <TextInput
+                  style={styles.dateInput}
+                  value={currentExamDate.toISOString().split('T')[0]}
+                  onChangeText={(text) => {
+                    const date = new Date(text);
+                    if (!isNaN(date.getTime())) {
+                      setCurrentExamDate(date);
+                    }
+                  }}
+                  placeholder="YYYY-MM-DD"
+                  placeholderTextColor="#999"
+                />
+                
+                {/* Quick Date Options */}
+                <View style={styles.quickDateOptions}>
+                  <TouchableOpacity
+                    style={styles.quickDateButton}
+                    onPress={() => {
+                      const tomorrow = new Date();
+                      tomorrow.setDate(tomorrow.getDate() + 1);
+                      setCurrentExamDate(tomorrow);
+                    }}
+                  >
+                    <Text style={styles.quickDateText}>Tomorrow</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.quickDateButton}
+                    onPress={() => {
+                      const nextWeek = new Date();
+                      nextWeek.setDate(nextWeek.getDate() + 7);
+                      setCurrentExamDate(nextWeek);
+                    }}
+                  >
+                    <Text style={styles.quickDateText}>Next Week</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.quickDateButton}
+                    onPress={() => {
+                      const nextMonth = new Date();
+                      nextMonth.setMonth(nextMonth.getMonth() + 1);
+                      setCurrentExamDate(nextMonth);
+                    }}
+                  >
+                    <Text style={styles.quickDateText}>Next Month</Text>
+                  </TouchableOpacity>
+                </View>
+
+                {/* Action Buttons */}
+                <View style={styles.modalButtons}>
+                  <TouchableOpacity
+                    style={[styles.modalButton, styles.cancelButton]}
+                    onPress={() => setShowDatePicker(false)}
+                  >
+                    <Text style={styles.cancelButtonText}>Cancel</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={[styles.modalButton, styles.confirmButton]}
+                    onPress={() => setShowDatePicker(false)}
+                  >
+                    <Text style={styles.confirmButtonText}>Confirm</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+          </Modal>
 
           {/* Add Topics */}
           <Text style={styles.subsectionTitle}>Topics</Text>
