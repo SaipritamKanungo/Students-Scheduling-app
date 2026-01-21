@@ -239,6 +239,8 @@ async def get_study_plan(plan_id: str):
         plan['id'] = str(plan['_id'])
         del plan['_id']
         return plan
+    except HTTPException:
+        raise  # Re-raise HTTPExceptions as-is
     except Exception as e:
         logging.error(f"Error fetching study plan: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
