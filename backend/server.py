@@ -26,9 +26,27 @@ api_router = APIRouter(prefix="/api")
 
 # Helper function to convert ObjectId to string
 def serialize_doc(doc):
-    if doc and '_id' in doc:
-        doc['_id'] = str(doc['_id'])
-    return doc
+    """Recursively convert ObjectId to string in nested documents"""
+    if isinstance(doc, dict):
+        result = {}
+        for key, value in doc.items():
+            if key == '_id' and isinstance(value, ObjectId):
+                result['id'] = str(value)
+            elif isinstance(value, ObjectId):
+                result[key] = str(value)
+            elif isinstance(value, dict):
+                result[key] = serialize_doc(value)
+            elif isinstance(value, list):
+                result[key] = [serialize_doc(item) if isinstance(item, (dict, ObjectId)) else item for item in value]
+            else:
+                result[key] = value
+        return result
+    elif isinstance(doc, ObjectId):
+        return str(doc)
+    elif isinstance(doc, list):
+        return [serialize_doc(item) if isinstance(item, (dict, ObjectId)) else item for item in doc]
+    else:
+        return doc
 
 # Define Models
 class Topic(BaseModel):
