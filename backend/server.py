@@ -268,6 +268,8 @@ async def update_session_status(plan_id: str, update_data: UpdateSessionStatus):
         plan['id'] = str(plan['_id'])
         del plan['_id']
         return plan
+    except HTTPException:
+        raise  # Re-raise HTTPExceptions as-is
     except Exception as e:
         logging.error(f"Error updating session: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
